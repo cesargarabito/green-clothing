@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { signInAuthUserWithEmailAndPassword, createUserDocumentFromAuth, signInWithGooglePopup } from "../../utils/firebase/firebase.utils";
 import FormInput from '../form-input/form-input.component.jsx'
 import './sign-in-form.styles.scss'
 import Button from "../button/button.component";
+
 
 const defaultFormFields = {
     
@@ -15,6 +16,8 @@ const SignInForm = () => {
     const [formFields, setFormFields] = useState(defaultFormFields);
     const { email, password } = formFields;
 
+    
+
 
 const resetFormFields = () => {
  setFormFields(defaultFormFields);
@@ -26,9 +29,9 @@ setFormFields({...formFields, [name]: value});
     };
 
     const signInWithGoogle = async () => {
-        const {user} = await signInWithGooglePopup();
+         await signInWithGooglePopup();
 
-         await createUserDocumentFromAuth(user);
+          
     }
 
     const handleSubmit = async (event) => {
@@ -36,8 +39,8 @@ setFormFields({...formFields, [name]: value});
         
 
         try {
-            const response = await signInAuthUserWithEmailAndPassword(email, password);
-            console.log(response);
+            const {user} = await signInAuthUserWithEmailAndPassword(email, password);
+            
             resetFormFields();
         } catch(error) {
             if(error.code === 'auth/wrong-password') {
@@ -55,9 +58,6 @@ setFormFields({...formFields, [name]: value});
             <h2>Already have an account?</h2>
             <span>Sign in with your email and password</span>
             <form onSubmit={handleSubmit}>
-                
-                
-               
                 <FormInput 
                 label='Email'
                 type='email' 
