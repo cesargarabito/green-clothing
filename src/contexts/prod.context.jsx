@@ -11,18 +11,7 @@ export const ProductProvider = ({ children }) => {
     const [products, setProducts] = useState(Products);
     const value = { products };
 
-    
 
-//     useEffect(() => {
-// const unsubscribe = onAuthStateChangedListener((product) => {
-//     if(product) {
-//         createUserDocumentFromAuth(product);
-//     }
-//     setCurrentProduct(product);
-// });
-
-// return unsubscribe;
-//     }, []);
 
     return (<ProductContext.Provider value={value}>{children}</ProductContext.Provider>);
 }
