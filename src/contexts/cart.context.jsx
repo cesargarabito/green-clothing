@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useReducer } from "react";
 
 const restCartItem = (cartItems, productToRest) => {
     const existedCartItem = cartItems.find((cartItem) => cartItem.id === productToRest.id);
@@ -39,13 +39,129 @@ export const CartContext = createContext({
     cartCount: 0,
     totalCount: 0
 });
+//for isOpen 
+export const OPEN_ACTION_TYPES = {
+    SET_OPEN_CART: 'SET_OPEN_CART'
+} 
+
+const openReducer = (state, action) => {
+    
+    const { type, payload } = action;
+
+    switch(type) {
+        case OPEN_ACTION_TYPES.SET_OPEN_CART:
+        return {
+            ...state,
+            isOpen: payload,
+        };
+        default:
+            throw new Error(`Unhandled type ${type} in openReducer`);
+    }
+
+};
+
+const INITIAL_STATE = {
+    isOpen: false,
+};
+//for cartitems
+export const CART_ACTION_TYPES = {
+    SET_CART_ITEMS: 'SET_CART_ITEMS'
+} 
+
+const cartItemsReducer = (state, action) => {
+    console.log('dispatch');
+    console.log(action);
+    const { type, payload } = action;
+
+    switch(type) {
+        case CART_ACTION_TYPES.SET_CART_ITEMS:
+        return {
+            ...state,
+            cartItems: payload,
+        };
+        default:
+            throw new Error(`Unhandled type ${type} in cartReducer`);
+    }
+
+};
+const INITIAL_STATE_CART_ITEMS = {
+    cartItems: [],
+};
+//for cartCount
+
+
+const cartItemsCountReducer = (state, action) => {
+    
+    const { type, payload } = action;
+
+    switch(type) {
+        case 'SET_CART_COUNT':
+        return {
+            ...state,
+            cartCount: payload,
+        };
+        default:
+            throw new Error(`Unhandled type ${type} in cartCountReducer`);
+    }
+
+};
+
+const INITIAL_STATE_CART_ITEMS_COUNT = {
+    cartCount: 0,
+};
+//for totalCount
+
+
+const totalCountReducer = (state, action) => {
+    console.log('dispatch');
+    console.log(action);
+    const { type, payload } = action;
+
+    switch(type) {
+        case 'SET_CART_TOTAL':
+        return {
+            ...state,
+            totalCount: payload,
+        };
+        default:
+            throw new Error(`Unhandled type ${type} in totalCountReducer`);
+    }
+
+};
+
+const INITIAL_STATE_CART_TOTAL_COUNT = {
+    totalCount: 0,
+};
 
 export const CartProvider = ({ children }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [cartItems, setCartItems] = useState([]);
-    const [cartCount, setCartCount] = useState(0);
-    const [totalCount, setTotalCount] = useState(0);
-
+    const [ {isOpen}, dispatch] = useReducer(openReducer, INITIAL_STATE);
+    
+    
+    const setIsOpen = (open) => {
+        dispatch({ type: OPEN_ACTION_TYPES.SET_OPEN_CART, payload: open});
+    };
+    
+    
+    const [ {cartItems}, dispatched] = useReducer(cartItemsReducer, INITIAL_STATE_CART_ITEMS);
+    console.log(cartItems);
+    
+    const setCartItems = (open) => {
+        dispatched({ type: CART_ACTION_TYPES.SET_CART_ITEMS, payload: open});
+    };
+    
+    const [ {cartCount}, dispatche] = useReducer(cartItemsCountReducer, INITIAL_STATE_CART_ITEMS_COUNT);
+    console.log(cartCount);
+    
+    const setCartCount = (cartcount) => {
+        dispatche({ type: 'SET_CART_COUNT', payload: cartcount});
+    };
+    // const [totalCount, setTotalCount] = useState(0);
+    const [ {totalCount}, dispatchede] = useReducer(totalCountReducer, INITIAL_STATE_CART_TOTAL_COUNT);
+    console.log(totalCount);
+    
+    const setTotalCount = (totalcount) => {
+        dispatchede({ type: 'SET_CART_TOTAL', payload: totalcount});
+    };
     useEffect(() => {
         const newTotalCount = cartItems.reduce((total, cartItem) => total + (cartItem.quantity*cartItem.price), 0)
         setTotalCount(newTotalCount);
