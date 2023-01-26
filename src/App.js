@@ -9,7 +9,7 @@ import {useEffect} from "react";
 import { onAuthStateChangedListener, createUserDocumentFromAuth, getCurrentUser } from "./utils/firebase/firebase.utils";
 import { checkUserSession, setCurrentUser } from './store/user/user.action';
 import { useDispatch } from 'react-redux';
-
+import { GlobalStyle } from './global.styles';
 
 
 const App = () => {
@@ -23,6 +23,8 @@ const App = () => {
         
 
   return (
+    <div>
+      <GlobalStyle />
     <Routes>
       <Route path='/' element={<Navigation />}>
         <Route index element={ <Home />} />
@@ -31,6 +33,7 @@ const App = () => {
         <Route path='auth' element={ <Authentication />} />
       </Route>
     </Routes>
+    </div>
     
   );
 }
